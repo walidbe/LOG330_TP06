@@ -17,6 +17,8 @@ import java.util.Locale;
  */
 public class FileAnalyser {
 
+	private final static String SPLIT = ";";
+	private final static String SPLIT_COMMA = ",";
 	private String myFile;
 	public FileAnalyser(String myFile){
 		this.myFile = myFile;
@@ -35,11 +37,10 @@ public class FileAnalyser {
 		List<Points> numberList = new ArrayList<Points>();
 	
 		BufferedReader bfr = new BufferedReader(new FileReader(myFile));
-		String splitBy = ",";
 		bfr.readLine();
 		bfr.readLine();
 		while((line = bfr.readLine()) != null) {
-			String[] splitLine = line.split(splitBy);
+			String[] splitLine = line.split(SPLIT_COMMA);
 			if(!checkNumberOfColumnsValidity(splitLine)) {
 				System.out.println("Nombre de colomne pas valide");
 				return numberList;
@@ -73,10 +74,9 @@ public class FileAnalyser {
 		List<Points> numberList = new ArrayList<Points>();
 	
 		BufferedReader bfr = new BufferedReader(new FileReader(myFile));
-		String splitBy = ";";
 		NumberFormat format = NumberFormat.getInstance(Locale.FRANCE);
 		while((elementInList = bfr.readLine()) != null) {
-			String[] splitLine = elementInList.split(splitBy);
+			String[] splitLine = elementInList.split(SPLIT);
 			numberList.add(new Points(format.parse(splitLine[0]).doubleValue(),format.parse(splitLine[1]).doubleValue()));
 		}
 		bfr.close();

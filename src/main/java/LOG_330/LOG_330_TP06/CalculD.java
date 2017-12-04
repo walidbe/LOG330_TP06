@@ -22,9 +22,13 @@ public final class CalculD {
 	private double sumYSquare = 0;
 	private double cnt = 0;
 	private double vTotal = 0;
+	private List<Points> myList;
 	
-	public CalculD(){
-	
+	public CalculD(List<Points> myList){
+	this.myList = myList;
+	}
+	public CalculD() {
+		
 	}
 
 	/**
@@ -32,7 +36,7 @@ public final class CalculD {
 	 * @param myList
 	 * @return
 	 */
-	public  boolean start(List<Points> myList){
+	public  boolean start(){
 		
 		try{
 			sumX = 0;
@@ -51,36 +55,105 @@ public final class CalculD {
 		return true;
 	}
 	
-	public  boolean oldStart(List<Double> myList){
+	public  boolean oldStart(List<Double> oldList){
 		vTotal = 0;
 		sumX=0;
 		cnt=0;
 		try{
-		for(Double element : myList){
+		for(Double element : oldList){
 			sumX +=element;
 			cnt +=1;
 		}
 	
 		
-		for(Double element : myList){
-			vTotal += Math.pow(element - calculateAvg(), 2);
+		for(Double element : oldList){
+			vTotal += Math.pow(element - calculateAverage(), 2);
 		}
 
 		}catch(Exception e){return false;}
 		return true;
 	}
 	
-	public Double calculateAvg() {
+	/**
+	 * Calcul racine carre
+	 * @param valueToEstimate
+	 * @return
+	 */
+	public Double calculateSquareRoot(double valueToEstimate) {
+		Double racine = 0.0;
+		racine = Math.sqrt(1+(1/cnt) + (Math.pow(valueToEstimate-calculateAverage(), 2))/calculateAverageXi());
+		System.out.println("Racine = " + racine);
+		return racine;
+	}
+	
+	/**
+	 * Calcul interval
+	 * @param valueToEstimate
+	 * @param alpha
+	 * @return
+	 */
+	public Double calculateInterval(double valueToEstimate,double alpha) {
+		Double root = calculateSquareRoot(valueToEstimate);
+		Double interval = alpha*calculateEcartTypeTp06()*root;
+		return interval;
+	}
+	
+	/**
+	 * Calcul moyenne
+	 * @return
+	 */
+	public Double calculateAverage() {
 		average = sumX / cnt;
 		checkAvg();
 		return average;
 	}
+	public Double calculateAverageXi() {
+		Double sumXiXavgSquare = 0.0;
+		for(Points element : myList){
+			
+			sumXiXavgSquare += Math.pow(element.getX() - calculateAverage(), 2);
+		}
+		return sumXiXavgSquare;
+	}
 	
+	
+	/**
+	 * Calcul variance
+	 * @return
+	 */
 	public Double calculateVariance() {
 		variance = vTotal/(cnt-1);
 		checkVariance();
 		return variance;
 	}
+	
+	public Double calculateVarianceTp06() {
+		variance = 0.0;
+		vTotal = 0.0;
+		calculateSlope();
+		calculateCste();
+		for(Points element : myList){
+			
+			vTotal += Math.pow(element.getY() - cste - slope*element.getX(), 2);
+		}
+		variance = vTotal/(cnt-1);
+		checkVariance();
+		return variance;
+	}
+	
+	
+	
+	/**
+	 * Calcul Ecart type
+	 * @return
+	 */
+	public Double calculateEcartTypeTp06() {
+		calculateVarianceTp06();
+		ecartType = (double) Math.sqrt(variance);
+		checkEcartType();
+		return ecartType;
+	}
+	
 	
 	public Double calculateEcartType() {
 		calculateVariance();
@@ -117,6 +190,11 @@ public final class CalculD {
 		}
 	}
 	
+	
+	/**
+	 * Calcul correlation
+	 * @return
+	 */
 	public  double calculateCorrelation(){
 		correlation = (cnt * sumProduct - sumX * sumY) / Math.sqrt((cnt*sumXSquare - Math.pow(sumX, 2)) * (cnt*sumYSquare - Math.pow(sumY, 2)));
 		checkCorrelation();
@@ -132,6 +210,11 @@ public final class CalculD {
 	   }
 	}
 	
+	
+	/**
+	 * Calcul pente
+	 * @return
+	 */
 	public double calculateSlope() {
 	     slope = (sumProduct - cnt*(sumX/cnt)*(sumY/cnt)) / (sumXSquare - cnt*(Math.pow(sumX/cnt,2)));
 	     checkSlope();
@@ -154,13 +237,12 @@ public final class CalculD {
 			cste = Double.MIN_VALUE;
 		}	
 	}
+	
+	/**
+	 * Calcul constante
+	 * @return
+	 */
 	public double calculateCste() {
-		System.out.println("Sum Y " + sumY);
-		System.out.println("Cnt " + cnt);
-		System.out.println("Slope " + slope);
-		System.out.println("Sum X " + sumX);
-
-
 		cste = (sumY/cnt) - slope*(sumX/cnt);
 		checkCste();
 		return cste;

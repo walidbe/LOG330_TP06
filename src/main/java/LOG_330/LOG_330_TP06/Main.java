@@ -25,24 +25,39 @@ public class Main {
 		
 		FileAnalyser fa = new FileAnalyser(myFile);
 		try {
-			List<Points> myList = fa.tp5LoadFile();
+			List<Points> myList = fa.loadFile();
 			if(myList == null || myList.isEmpty()) {
 				System.out.println("Liste de points vide");
 				return;
 			}
-			CalculD c = new CalculD();
-			if(c.start(myList)){
-				double correlation = c.calculateCorrelation();
-				System.out.println("Correlation  = " + correlation);
-				if(correlation >0.8) {
-					System.out.println("On peut conclure qu'on a une bonne correlation");
-				}
-				else{
-					System.out.println("On peut conclure qu'on n'a pas une bonne correlation");
-				}
+			CalculD c = new CalculD(myList);
+			if(c.start()){
 				
 				System.out.println("Pente  = " + c.calculateSlope());
 				System.out.println("Constante  = " + c.calculateCste());
+				Double variance = c.calculateVarianceTp06();
+				Double ecartType = c.calculateEcartTypeTp06();
+				Double avg = c.calculateAverageXi();
+				System.out.println("Variance = "+ variance);
+				System.out.println("Ecart Type = " + ecartType);
+				System.out.println("Somme (Xi-Xmoy)^2 = " + avg);
+				System.out.println("Veuillez entrez la valeur à prédire (ex:1119) : ");
+				int value = sc.nextInt();
+
+				Double predictedValue = value*c.calculateSlope() + c.calculateCste();
+				System.out.println("La valeur predite Yk est = " + predictedValue );
+				Double interval90 = c.calculateInterval(value, 1.86);
+				Double interval70 = c.calculateInterval(value, 1.108);
+
+				System.out.println("Avec un interval de 90%, on trouve (+ -)  " + interval90);
+				System.out.println("*****Limite inférieur 90%  " + (predictedValue - interval90));
+				System.out.println("*****Limite supérieur 90%  " + (predictedValue + interval90));
+
+				System.out.println("Avec un interval de 70%, on trouve (+ -) "  + c.calculateInterval(value, 1.108));
+				System.out.println("*****Limite inférieur 70%  " + (predictedValue - interval70));
+				System.out.println("*****Limite supérieur 70%  " + (predictedValue + interval70));
+
+
 			}
 			else
 				System.out.println("erreur lors de traitement de données");

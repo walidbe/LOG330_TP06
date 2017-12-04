@@ -25,8 +25,8 @@ public class PenteTest {
 	@Test
 	public void calculPenteTest() throws NumberFormatException, FileNotFoundException, IOException, ParseException {
 		 FileAnalyser fa = new FileAnalyser("data.csv");
-    	 CalculD c = new CalculD();
-		 c.start(fa.loadFile());
+    	 CalculD c = new CalculD(fa.loadFile());
+		 c.start();
 		assertEquals(1.72,c.calculateSlope(),0.01);
 		
 	}
@@ -34,11 +34,11 @@ public class PenteTest {
 	@Test
 	public void calculPenteMaxTest() throws NumberFormatException, FileNotFoundException, IOException, ParseException {
 		 FileAnalyser fa = new FileAnalyser("data.csv");
-    	 CalculD c = new CalculD();
     	 List<Points> myList = new ArrayList<Points>();
 	     myList.add(new Points(5.0, Double.MAX_VALUE));
 	     myList.add(new Points(Double.MAX_VALUE, 6.0));
-		 c.start(myList);
+    	 CalculD c = new CalculD(myList);
+		 c.start();
 
 	
 		assertEquals(Double.MAX_VALUE,c.calculateSlope(),0.01);
@@ -48,11 +48,11 @@ public class PenteTest {
 	@Test
 	public void calculPenteMinTest() throws NumberFormatException, FileNotFoundException, IOException, ParseException {
 		 FileAnalyser fa = new FileAnalyser("data.csv");
-    	 CalculD c = new CalculD();
     	 List<Points> myList = new ArrayList<Points>();
 	     myList.add(new Points(Double.MIN_VALUE, Double.MIN_VALUE));
 	     myList.add(new Points(Double.MIN_VALUE, Double.MIN_VALUE));
-		 c.start(myList);
+    	 CalculD c = new CalculD(myList);
+		 c.start();
 		assertEquals(Double.MIN_VALUE,c.calculateSlope(),0.01);
 	
 	}
@@ -61,8 +61,8 @@ public class PenteTest {
 	 public void penteTestException() throws FileNotFoundException, IOException, NumberFormatException, ParseException
 	   {
 	  	  FileAnalyser fa = new FileAnalyser("data2.csv");
-	  	  CalculD c = new CalculD();
-	  	  c.start(fa.loadFile());
+	  	  CalculD c = new CalculD(fa.loadFile());
+	  	  c.start();
 	  	  
 	   } 
 }

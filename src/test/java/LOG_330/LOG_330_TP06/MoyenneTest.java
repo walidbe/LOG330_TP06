@@ -41,7 +41,7 @@ public class MoyenneTest {
 
 	  CalculD c = new CalculD();
 	  c.oldStart(listElement);
-	  assertEquals(4.9E-324,c.calculateAvg(),0.1);
+	  assertEquals(4.9E-324,c.calculateAverage(),0.1);
 	  
   } 
   
@@ -56,7 +56,7 @@ public class MoyenneTest {
 
 	  CalculD c = new CalculD();
 	  c.oldStart(listElement);
-	  assertEquals(Double.MAX_VALUE,c.calculateAvg(),0.1);
+	  assertEquals(Double.MAX_VALUE,c.calculateAverage(),0.1);
 	  
   } 
   
@@ -66,7 +66,7 @@ public class MoyenneTest {
 	  FileAnalyser fa = new FileAnalyser("data2.csv");
 	  List<Double> listElement = fa.oldLoadFile();
 	  CalculD c = new CalculD();
-	  c.calculateAvg();
+	  c.calculateAverage();
 	  
   } 
   
@@ -83,7 +83,7 @@ public class MoyenneTest {
 	  List<Double> listElement = fa.oldLoadFile();
 	  CalculD c = new CalculD();
 	  c.oldStart(listElement);
-	  assertEquals(638.9,c.calculateAvg(),0.1);
+	  assertEquals(638.9,c.calculateAverage(),0.1);
 	  
   } 
 
